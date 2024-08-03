@@ -147,6 +147,7 @@ struct ContentView: View {
         newImage.id = UUID()
         newImage.imageData = image.pngData()
         newImage.timestamp = Date()
+        newImage.prompt = prompt
         
         do {
             try PersistenceController.shared.container.viewContext.save()

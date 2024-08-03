@@ -13,6 +13,7 @@ struct ProfileView: View {
     @State private var showActionSheet = false
     @State private var imageToDelete: SavedImage?
     @State private var selectedImage: SavedImage?
+    @State private var showImageView = false
     
     var body: some View {
         VStack {
@@ -103,7 +104,7 @@ struct ProfileView: View {
                 title: Text("Image Options"),
                 buttons: [
                     .default(Text("View")) {
-                        viewImage(selectedImage)
+                        showImageView = true
                     },
                     .destructive(Text("Delete")) {
                         if let imageToDelete = selectedImage {
@@ -125,6 +126,11 @@ struct ProfileView: View {
                 },
                 secondaryButton: .cancel()
             )
+        }
+        .sheet(isPresented: $showImageView) {
+            if let selectedImage = selectedImage {
+                ImageView(savedImage: selectedImage)
+            }
         }
         .onAppear {
             loadUserProfile()
@@ -164,11 +170,7 @@ struct ProfileView: View {
             self.newUserName = "User"
         }
     }
-    
-    private func viewImage(_ savedImage: SavedImage?) {
-        // Placeholder action for viewing the image
-        print("View image tapped")
-    }
+
     
     private func deleteImage(_ savedImage: SavedImage) {
         viewContext.delete(savedImage)
