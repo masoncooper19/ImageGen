@@ -116,7 +116,7 @@ struct ContentView: View {
             do {
                 let config = Configuration(
                     organizationId: "ORG_ID",
-                    apiKey: "API_ID"
+                    apiKey: "API_KEY"
                 )
                 let openAi = OpenAI(config)
                 let imageParam = ImageParameters(
@@ -140,12 +140,13 @@ struct ContentView: View {
         guard let image = image else { return }
         
         // Save image to Core Data
-        let newImage = SavedImage(context: PersistenceController.preview.container.viewContext)
+        let newImage = SavedImage(context: PersistenceController.shared.container.viewContext)
+        newImage.id = UUID()
         newImage.imageData = image.pngData()
         newImage.timestamp = Date()
         
         do {
-            try PersistenceController.preview.container.viewContext.save()
+            try PersistenceController.shared.container.viewContext.save()
             print("Image saved successfully.")
         } catch {
             print("Error saving image: \(error)")
@@ -164,6 +165,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView().environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
 }
