@@ -31,7 +31,7 @@ struct ProfileView: View {
                 if editingName {
                     HStack {
                         TextField("Enter your name", text: $newUserName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(PlainTextFieldStyle())
                             .padding()
                             .background(Color.white.opacity(0.8))
                             .cornerRadius(10)

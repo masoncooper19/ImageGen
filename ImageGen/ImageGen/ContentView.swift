@@ -17,18 +17,19 @@ struct ContentView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .padding(.horizontal, 50)
-                        .padding(.top, 40)
-                        .padding(.bottom, 20)
+                        .padding(.leading, 20)
+                    
+                    Spacer()
                     
                     NavigationLink(destination: ProfileView()) {
                         Image(systemName: "person.circle.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .foregroundColor(.white)
-                            .padding(.top, 20)
+                            .padding(.trailing, 20)
                     }
                 }
+                .padding(.top, 50)
                 
                 // Display image or placeholder
                 if let image = image {
@@ -38,8 +39,8 @@ struct ContentView: View {
                         .frame(height: 300)
                         .cornerRadius(15)
                         .shadow(radius: 10)
-                        .padding(.horizontal)
-                    
+                        .padding()
+
                     HStack {
                         Button(action: saveImage) {
                             Image(systemName: "checkmark.circle.fill")
@@ -79,18 +80,19 @@ struct ContentView: View {
                 
                 // TextField for prompt input
                 TextField("Enter prompt...", text: $prompt)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(PlainTextFieldStyle())
                     .padding()
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                    .padding(.horizontal)
+                    .padding()
                 
                 // Loading indicator or generate button
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .padding()
+                        .padding(.bottom, 40)
                 } else {
                     Button(action: generateImage) {
                         Text("Generate Image")
@@ -103,6 +105,7 @@ struct ContentView: View {
                             .shadow(radius: 5)
                     }
                     .padding(.horizontal)
+                    .padding(.bottom, 40)
                 }
             }
             .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
