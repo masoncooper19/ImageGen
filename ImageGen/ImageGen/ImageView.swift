@@ -1,8 +1,16 @@
 import SwiftUI
+import UIKit
 
 struct ImageView: View {
     var savedImage: SavedImage
-    
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showShareSheet = false
+    @State private var showDeleteAlert = false
+    @State private var uiImage: UIImage?
+    @State private var isLoading = true
+    @State private var loadError: String?
+
     var body: some View {
         VStack {
             if let data = savedImage.imageData, let uiImage = UIImage(data: data) {
@@ -13,7 +21,11 @@ struct ImageView: View {
                     .cornerRadius(15)
                     .shadow(radius: 10)
                     .padding(.horizontal)
-                    .padding(.top, 20)
+                    .padding(.top, 50)
+            } else {
+                Text("No image available")
+                    .foregroundColor(.white)
+                    .padding()
             }
             
             Text(savedImage.prompt ?? "No prompt available")
@@ -25,11 +37,67 @@ struct ImageView: View {
                 .shadow(radius: 5)
                 .padding(.horizontal)
                 .padding(.top, 20)
-            
+
+            HStack {
+                Button(action: {
+                    showShareSheet = true
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 30))
+                        .foregroundColor(.white)
+                        .padding()
+                }
+                .sheet(isPresented: $showShareSheet) {
+                    if let uiImage = uiImage {
+                        ActivityView(activityItems: [uiImage])
+                    }
+                }
+
+                Button(action: {
+                    showDeleteAlert = true
+                }) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 30))
+                        .foregroundColor(.white)
+                        .padding()
+                }
+            }
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
+        .alert(isPresented: $showDeleteAlert) {
+            Alert(
+                title: Text("Delete Image"),
+                message: Text("Are you sure you want to delete this image?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    deleteImage()
+                },
+                secondaryButton: .cancel()
+            )
+        }
     }
+    
+    private func deleteImage() {
+        viewContext.delete(savedImage)
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error deleting image: \(error)")
+        }
+        presentationMode.wrappedValue.dismiss()
+    }
+}
+
+struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

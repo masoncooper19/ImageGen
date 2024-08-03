@@ -9,9 +9,6 @@ struct ProfileView: View {
     
     @State private var editingName: Bool = false
     @State private var newUserName: String = ""
-    @State private var showAlert = false
-    @State private var showActionSheet = false
-    @State private var imageToDelete: SavedImage?
     @State private var selectedImage: SavedImage?
     @State private var showImageView = false
     
@@ -79,7 +76,7 @@ struct ProfileView: View {
                             if let data = savedImage.imageData, let uiImage = UIImage(data: data) {
                                 Button(action: {
                                     selectedImage = savedImage
-                                    showActionSheet = true
+                                    showImageView = true
                                 }) {
                                     Image(uiImage: uiImage)
                                         .resizable()
@@ -99,34 +96,6 @@ struct ProfileView: View {
         }
         .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
-        .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(
-                title: Text("Image Options"),
-                buttons: [
-                    .default(Text("View")) {
-                        showImageView = true
-                    },
-                    .destructive(Text("Delete")) {
-                        if let imageToDelete = selectedImage {
-                            deleteImage(imageToDelete)
-                        }
-                    },
-                    .cancel()
-                ]
-            )
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Delete Image"),
-                message: Text("Are you sure you want to delete this image?"),
-                primaryButton: .destructive(Text("Delete")) {
-                    if let imageToDelete = imageToDelete {
-                        deleteImage(imageToDelete)
-                    }
-                },
-                secondaryButton: .cancel()
-            )
-        }
         .sheet(isPresented: $showImageView) {
             if let selectedImage = selectedImage {
                 ImageView(savedImage: selectedImage)
@@ -138,16 +107,13 @@ struct ProfileView: View {
     }
     
     private func getUserName() -> String {
-        // Safely return the name of the first profile or "User" if no profile exists
         return profiles.first?.name ?? "User"
     }
     
     private func saveName() {
         if let profile = profiles.first {
-            // Update existing profile
             profile.name = newUserName
         } else {
-            // Create new profile
             let newProfile = UserProfile(context: viewContext)
             newProfile.id = UUID()
             newProfile.name = newUserName
@@ -163,21 +129,10 @@ struct ProfileView: View {
     }
     
     private func loadUserProfile() {
-        // Load user profile safely
         if let profile = profiles.first {
             self.newUserName = profile.name ?? "User"
         } else {
             self.newUserName = "User"
-        }
-    }
-
-    
-    private func deleteImage(_ savedImage: SavedImage) {
-        viewContext.delete(savedImage)
-        do {
-            try viewContext.save()
-        } catch {
-            print("Error deleting image: \(error)")
         }
     }
 }
