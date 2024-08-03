@@ -43,12 +43,17 @@ struct ContentView: View {
         isLoading = true
         Task {
             do {
-                let openAi = OpenAI(apiKey: "YOUR_API_KEY")
+                let config = Configuration(
+                    organizationId: "INSERT-ORGANIZATION-ID",
+                    apiKey: "INSERT-API-KEY"
+                )
+                let openAi = OpenAI(config)
                 let imageParam = ImageParameters(
                     prompt: prompt,
                     resolution: .large,
                     responseFormat: .base64Json
                 )
+                
                 let result = try await openAi.createImage(parameters: imageParam)
                 let b64Image = result.data[0].image
                 let decodedImage = try openAi.decodeBase64Image(b64Image)
