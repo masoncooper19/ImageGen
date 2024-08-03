@@ -5,78 +5,92 @@ struct ContentView: View {
     @State private var image: UIImage? = nil
     @State private var isLoading = false
     @State private var prompt = ""
+    @State private var showProfile = false
     
     var body: some View {
-        VStack {
-            // Title
-            Text("ImageGen")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, 40)
-                .padding(.bottom, 20)
-            
-            // Display image or placeholder
-            if let image = image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 300)
-                    .cornerRadius(15)
-                    .shadow(radius: 10)
-                    .padding(.horizontal)
-            } else {
-                VStack {
-                    Rectangle()
-                        .foregroundColor(Color.gray.opacity(0.2))
+        NavigationView {
+            VStack {
+                // Title
+                HStack {
+                    Text("ImageGen")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 50)
+                        .padding(.top, 40)
+                        .padding(.bottom, 20)
+                    
+                    NavigationLink(destination: ProfileView()) {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                    }
+                }
+                
+                // Display image or placeholder
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
                         .frame(height: 300)
                         .cornerRadius(15)
                         .shadow(radius: 10)
-                        .overlay(
-                            VStack {
-                                Image(systemName: "photo.fill")
-                                    .font(.system(size: 50))
-                                    .foregroundColor(.gray)
-                                Text("No Image")
-                                    .foregroundColor(.gray)
-                            }
-                        )
+                        .padding(.horizontal)
+                } else {
+                    VStack {
+                        Rectangle()
+                            .foregroundColor(Color.gray.opacity(0.2))
+                            .frame(height: 300)
+                            .cornerRadius(15)
+                            .shadow(radius: 10)
+                            .overlay(
+                                VStack {
+                                    Image(systemName: "photo.fill")
+                                        .font(.system(size: 50))
+                                        .foregroundColor(.gray)
+                                    Text("No Image")
+                                        .foregroundColor(.gray)
+                                }
+                            )
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
-            }
-            
-            // TextField for prompt input
-            TextField("Enter prompt...", text: $prompt)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                .background(Color.white.opacity(0.8))
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .padding(.horizontal)
-            
-            Spacer()
-            
-            // Loading indicator or generate button
-            if isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                
+                // TextField for prompt input
+                TextField("Enter prompt...", text: $prompt)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
-            } else {
-                Button(action: generateImage) {
-                    Text("Generate Image")
-                        .fontWeight(.bold)
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Loading indicator or generate button
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing))
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
+                } else {
+                    Button(action: generateImage) {
+                        Text("Generate Image")
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
+            .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
+            .edgesIgnoringSafeArea(.all)
         }
-        .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
-        .edgesIgnoringSafeArea(.all)
     }
     
     func generateImage() {
@@ -108,6 +122,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

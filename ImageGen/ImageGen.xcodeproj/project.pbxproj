@@ -12,6 +12,9 @@
 		C33D628F2C5E715D00997C56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C33D628E2C5E715D00997C56 /* Assets.xcassets */; };
 		C33D62922C5E715D00997C56 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C33D62912C5E715D00997C56 /* Preview Assets.xcassets */; };
 		C33D629A2C5E71D000997C56 /* OpenAIKit in Frameworks */ = {isa = PBXBuildFile; productRef = C33D62992C5E71D000997C56 /* OpenAIKit */; };
+		C33D629C2C5E7A8900997C56 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33D629B2C5E7A8900997C56 /* ProfileView.swift */; };
+		C33D62A22C5E7D2500997C56 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C33D62A02C5E7D2500997C56 /* Model.xcdatamodeld */; };
+		C33D62A42C5E7DDC00997C56 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33D62A32C5E7DDB00997C56 /* PersistenceController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +23,9 @@
 		C33D628C2C5E715A00997C56 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C33D628E2C5E715D00997C56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C33D62912C5E715D00997C56 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C33D629B2C5E7A8900997C56 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		C33D62A12C5E7D2500997C56 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		C33D62A32C5E7DDB00997C56 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +61,9 @@
 			children = (
 				C33D628A2C5E715A00997C56 /* ImageGenApp.swift */,
 				C33D628C2C5E715A00997C56 /* ContentView.swift */,
+				C33D629B2C5E7A8900997C56 /* ProfileView.swift */,
+				C33D62A32C5E7DDB00997C56 /* PersistenceController.swift */,
+				C33D62A02C5E7D2500997C56 /* Model.xcdatamodeld */,
 				C33D628E2C5E715D00997C56 /* Assets.xcassets */,
 				C33D62902C5E715D00997C56 /* Preview Content */,
 			);
@@ -146,7 +155,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C33D628D2C5E715A00997C56 /* ContentView.swift in Sources */,
+				C33D629C2C5E7A8900997C56 /* ProfileView.swift in Sources */,
 				C33D628B2C5E715A00997C56 /* ImageGenApp.swift in Sources */,
+				C33D62A22C5E7D2500997C56 /* Model.xcdatamodeld in Sources */,
+				C33D62A42C5E7DDC00997C56 /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +383,19 @@
 			productName = OpenAIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		C33D62A02C5E7D2500997C56 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C33D62A12C5E7D2500997C56 /* Model.xcdatamodel */,
+			);
+			currentVersion = C33D62A12C5E7D2500997C56 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C33D627F2C5E715A00997C56 /* Project object */;
 }
