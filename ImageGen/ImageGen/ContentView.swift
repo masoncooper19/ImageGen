@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var isLoading = false
     @State private var prompt = ""
     @State private var showProfile = false
+    @State private var showImageActions = false
     
     var body: some View {
         NavigationView {
@@ -38,6 +39,22 @@ struct ContentView: View {
                         .cornerRadius(15)
                         .shadow(radius: 10)
                         .padding(.horizontal)
+                    
+                    HStack {
+                        Button(action: saveImage) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.green)
+                        }
+                        .padding(.trailing, 20)
+                        
+                        Button(action: deleteImage) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.red)
+                        }
+                    }
+                    .padding(.top, 20)
                 } else {
                     VStack {
                         Rectangle()
@@ -58,6 +75,8 @@ struct ContentView: View {
                     .padding(.horizontal)
                 }
                 
+                Spacer()
+                
                 // TextField for prompt input
                 TextField("Enter prompt...", text: $prompt)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -66,8 +85,6 @@ struct ContentView: View {
                     .cornerRadius(10)
                     .shadow(radius: 5)
                     .padding(.horizontal)
-                
-                Spacer()
                 
                 // Loading indicator or generate button
                 if isLoading {
@@ -98,8 +115,8 @@ struct ContentView: View {
         Task {
             do {
                 let config = Configuration(
-                    organizationId: "ORG_KEY",
-                    apiKey: "API_KEY"
+                    organizationId: "ORG_ID",
+                    apiKey: "API_ID"
                 )
                 let openAi = OpenAI(config)
                 let imageParam = ImageParameters(
@@ -117,6 +134,31 @@ struct ContentView: View {
             }
             isLoading = false
         }
+    }
+    
+    func saveImage() {
+        guard let image = image else { return }
+        
+        // Save image to Core Data
+        let newImage = SavedImage(context: PersistenceController.preview.container.viewContext)
+        newImage.imageData = image.pngData()
+        newImage.timestamp = Date()
+        
+        do {
+            try PersistenceController.preview.container.viewContext.save()
+            print("Image saved successfully.")
+        } catch {
+            print("Error saving image: \(error)")
+        }
+        
+        // Reset the image
+        self.image = nil
+    }
+    
+    func deleteImage() {
+        // Reset the image
+        self.image = nil
+        print("Image deleted.")
     }
 }
 

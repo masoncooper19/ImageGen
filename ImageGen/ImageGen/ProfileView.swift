@@ -2,12 +2,13 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(entity: UserProfile.entity(), sortDescriptors: [])
+    @FetchRequest(sortDescriptors: [])
     private var profiles: FetchedResults<UserProfile>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \SavedImage.timestamp, ascending: false)])
+    private var savedImages: FetchedResults<SavedImage>
     
     @State private var editingName: Bool = false
     @State private var newUserName: String = ""
-    @State private var images: [UIImage] = [] // Placeholder for saved images
     
     var body: some View {
         VStack {
@@ -62,20 +63,22 @@ struct ProfileView: View {
             .padding()
             
             // Display saved images
-            if images.isEmpty {
+            if savedImages.isEmpty {
                 Text("No images saved.")
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
-                        ForEach(images, id: \.self) { image in
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 100)
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
+                        ForEach(savedImages) { savedImage in
+                            if let data = savedImage.imageData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 100)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                            }
                         }
                     }
                     .padding()
@@ -87,19 +90,23 @@ struct ProfileView: View {
         .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
         .onAppear {
-            loadImages()
+            loadUserProfile()
         }
     }
     
     private func getUserName() -> String {
+        // Safely return the name of the first profile or "User" if no profile exists
         return profiles.first?.name ?? "User"
     }
     
     private func saveName() {
         if let profile = profiles.first {
+            // Update existing profile
             profile.name = newUserName
         } else {
+            // Create new profile
             let newProfile = UserProfile(context: viewContext)
+            newProfile.id = UUID()
             newProfile.name = newUserName
         }
         
@@ -112,8 +119,13 @@ struct ProfileView: View {
         self.editingName = false
     }
     
-    private func loadImages() {
-        // Load saved images from Core Data and assign them to the images array
+    private func loadUserProfile() {
+        // Load user profile safely
+        if let profile = profiles.first {
+            self.newUserName = profile.name ?? "User"
+        } else {
+            self.newUserName = "User"
+        }
     }
 }
 
