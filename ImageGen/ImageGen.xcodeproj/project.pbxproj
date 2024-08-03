@@ -11,6 +11,7 @@
 		C33D628D2C5E715A00997C56 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33D628C2C5E715A00997C56 /* ContentView.swift */; };
 		C33D628F2C5E715D00997C56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C33D628E2C5E715D00997C56 /* Assets.xcassets */; };
 		C33D62922C5E715D00997C56 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C33D62912C5E715D00997C56 /* Preview Assets.xcassets */; };
+		C33D629A2C5E71D000997C56 /* OpenAIKit in Frameworks */ = {isa = PBXBuildFile; productRef = C33D62992C5E71D000997C56 /* OpenAIKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C33D629A2C5E71D000997C56 /* OpenAIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = ImageGen;
+			packageProductDependencies = (
+				C33D62992C5E71D000997C56 /* OpenAIKit */,
+			);
 			productName = ImageGen;
 			productReference = C33D62872C5E715A00997C56 /* ImageGen.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = C33D627E2C5E715A00997C56;
+			packageReferences = (
+				C33D62982C5E71D000997C56 /* XCRemoteSwiftPackageReference "OpenAIKit" */,
+			);
 			productRefGroup = C33D62882C5E715A00997C56 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -344,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C33D62982C5E71D000997C56 /* XCRemoteSwiftPackageReference "OpenAIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OpenDive/OpenAIKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C33D62992C5E71D000997C56 /* OpenAIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C33D62982C5E71D000997C56 /* XCRemoteSwiftPackageReference "OpenAIKit" */;
+			productName = OpenAIKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C33D627F2C5E715A00997C56 /* Project object */;
 }

@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "openaikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OpenDive/OpenAIKit.git",
+      "state" : {
+        "revision" : "1ae438e665433273474d330a74241a1c55742a79",
+        "version" : "2.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}
