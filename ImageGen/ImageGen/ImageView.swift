@@ -13,6 +13,16 @@ struct ImageView: View {
 
     var body: some View {
         VStack {
+            // Header
+            HStack {
+                Text("")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                Spacer()
+            }
+            .padding(.bottom, 20)
+            
             if let data = savedImage.imageData, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
@@ -77,6 +87,15 @@ struct ImageView: View {
                 },
                 secondaryButton: .cancel()
             )
+        }
+        .onAppear {
+            if let data = savedImage.imageData {
+                self.uiImage = UIImage(data: data)
+                self.isLoading = false
+            } else {
+                self.loadError = "Failed to load image data."
+                self.isLoading = false
+            }
         }
     }
     

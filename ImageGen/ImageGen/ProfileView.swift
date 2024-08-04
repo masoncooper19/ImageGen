@@ -9,14 +9,12 @@ struct ProfileView: View {
     
     @State private var editingName: Bool = false
     @State private var newUserName: String = ""
-    @State private var selectedImage: SavedImage?
-    @State private var showImageView = false
     
     var body: some View {
         VStack {
             // Header
             HStack {
-                Text("Profile")
+                Text("")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding()
@@ -74,10 +72,7 @@ struct ProfileView: View {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                         ForEach(savedImages) { savedImage in
                             if let data = savedImage.imageData, let uiImage = UIImage(data: data) {
-                                Button(action: {
-                                    selectedImage = savedImage
-                                    showImageView = true
-                                }) {
+                                NavigationLink(destination: ImageView(savedImage: savedImage)) {
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .scaledToFit()
@@ -96,43 +91,36 @@ struct ProfileView: View {
         }
         .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
-        .sheet(isPresented: $showImageView) {
-            if let selectedImage = selectedImage {
-                ImageView(savedImage: selectedImage)
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            if let profile = profiles.first {
+                self.newUserName = profile.name ?? "User"
+            } else {
+                let newProfile = UserProfile(context: viewContext)
+                newProfile.id = UUID()
+                newProfile.name = "User"
+                saveContext()
             }
         }
-        .onAppear {
-            loadUserProfile()
-        }
-    }
-    
-    private func getUserName() -> String {
-        return profiles.first?.name ?? "User"
     }
     
     private func saveName() {
         if let profile = profiles.first {
             profile.name = newUserName
-        } else {
-            let newProfile = UserProfile(context: viewContext)
-            newProfile.id = UUID()
-            newProfile.name = newUserName
+            saveContext()
+            editingName = false
         }
-        
+    }
+    
+    private func getUserName() -> String {
+        profiles.first?.name ?? "User"
+    }
+    
+    private func saveContext() {
         do {
             try viewContext.save()
         } catch {
-            print("Error saving name: \(error)")
-        }
-        
-        self.editingName = false
-    }
-    
-    private func loadUserProfile() {
-        if let profile = profiles.first {
-            self.newUserName = profile.name ?? "User"
-        } else {
-            self.newUserName = "User"
+            print("Failed to save context: \(error)")
         }
     }
 }
