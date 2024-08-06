@@ -119,7 +119,7 @@ struct ImageView: View {
                 ActionSheet(
                     title: Text("Options"),
                     buttons: [
-                        .default(Text("Download")) {
+                        .default(Text("Save")) {
                             downloadImage()
                         },
                         .default(Text("Share")) {
@@ -231,8 +231,9 @@ struct ImageView: View {
     }
 
     private func downloadImage() {
+        //needs to be fixed to work may have to update Info.plst
         guard let uiImage = uiImage else { return }
-        UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(uiImage, ImageSaver(), #selector(ImageSaver.image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
 
     private func saveContext() {
@@ -241,6 +242,28 @@ struct ImageView: View {
         } catch {
             print("Error saving context: \(error)")
         }
+    }
+}
+
+class ImageSaver: NSObject {
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // An error occurred while saving the image
+            DispatchQueue.main.async {
+                self.showAlertWith(title: "Save error", message: error.localizedDescription)
+            }
+        } else {
+            // Image saved successfully
+            DispatchQueue.main.async {
+                self.showAlertWith(title: "Saved!", message: "Your image has been saved to your photos.")
+            }
+        }
+    }
+
+    private func showAlertWith(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
     }
 }
 
