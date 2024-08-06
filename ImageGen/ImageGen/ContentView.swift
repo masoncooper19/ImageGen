@@ -110,6 +110,7 @@ struct ContentView: View {
             }
             .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
             .edgesIgnoringSafeArea(.all)
+            .navigationBarBackButtonHidden(true)
         }
     }
     

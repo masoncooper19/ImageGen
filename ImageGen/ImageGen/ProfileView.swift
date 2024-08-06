@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [])
     private var profiles: FetchedResults<UserProfile>
@@ -102,6 +103,16 @@ struct ProfileView: View {
                 saveContext()
             }
         }
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "arrow.left")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+            }
+        )
+        .navigationBarBackButtonHidden(true)
     }
     
     private func saveName() {
