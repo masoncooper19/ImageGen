@@ -40,7 +40,7 @@ struct ContentView: View {
                         .cornerRadius(15)
                         .shadow(radius: 10)
                         .padding()
-
+                    
                     HStack {
                         Button(action: saveImage) {
                             Image(systemName: "checkmark.circle.fill")
@@ -74,39 +74,40 @@ struct ContentView: View {
                             )
                     }
                     .padding(.horizontal)
+                    
+                    // TextField for prompt input
+                    TextField("Enter prompt...", text: $prompt)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .padding()
+                    
+                    // Loading indicator or generate button
+                    if isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .padding()
+                            .padding(.bottom, 40)
+                    } else {
+                        Button(action: generateImage) {
+                            Text("Generate Image")
+                                .fontWeight(.bold)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 5)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 40)
+                    }
                 }
                 
                 Spacer()
                 
-                // TextField for prompt input
-                TextField("Enter prompt...", text: $prompt)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .padding()
-                    .background(Color.white.opacity(0.8))
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
-                    .padding()
-                
-                // Loading indicator or generate button
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .padding()
-                        .padding(.bottom, 40)
-                } else {
-                    Button(action: generateImage) {
-                        Text("Generate Image")
-                            .fontWeight(.bold)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
-                    }
-                    .padding(.horizontal)
-                    .padding(.bottom, 40)
-                }
             }
             .background(LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .topLeading, endPoint: .bottomTrailing))
             .edgesIgnoringSafeArea(.all)
