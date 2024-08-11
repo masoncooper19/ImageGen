@@ -121,7 +121,7 @@ struct ContentView: View {
             do {
                 let config = Configuration(
                     organizationId: "ORG_ID",
-                    apiKey: "API_ID"
+                    apiKey: "API_KEY"
                 )
                 let openAi = OpenAI(config)
                 let imageParam = ImageParameters(
