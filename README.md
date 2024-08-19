@@ -16,7 +16,7 @@ To start using ImageGen, follow these steps:
 
 3. **Configure the App:**
    - Open the `ContentView.swift` and `ImageView.swift` files in your project.
-   - Replace the placeholders `"ORG_ID"` and `"API_ID"` with your actual Organization ID and Application ID.
+   - Replace the placeholders `"ORG_ID"` and `"API_KEY"` with your actual Organization ID and Application ID.
 
 ## Setup Instructions
 
