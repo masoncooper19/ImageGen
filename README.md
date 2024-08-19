@@ -48,10 +48,6 @@ We welcome contributions! If you'd like to contribute to ImageGen, please follow
 4. Push to the branch (`git push origin feature/YourFeature`).
 5. Create a new Pull Request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Contact
 
 For any questions or support, please reach out to:
